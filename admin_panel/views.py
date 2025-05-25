@@ -3,7 +3,6 @@ from django.contrib.auth import authenticate, login
 from django.contrib import messages
 
 def login_View(request):
-    print('begin 1')
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
@@ -11,32 +10,27 @@ def login_View(request):
         if not username or not password:
             messages.error(request, 'Please provide both username and password.')
             return render(request, 'login.html')
-        print(username)
-        print(password)
 
         # Attempt to authenticate using username
         user = authenticate(username=username, password=password)
-        print('begin 3')
-        print(username)
-        print(password)
 
         if user is not None:
             login(request, user)
-            print('begin 4')
-            print(username)
-            print(password)
-
-            return redirect('admin_panel:dashboard')
+            userGroup = request.user.groups.first()
+            if userGroup :
+                if userGroup == 'administrateur':
+                    return redirect('admin_panel:dashboard')
+                if userGroup == 'superviseur':
+                    return redirect()
+                if userGroup == 'client':
+                    return redirect()
+            else:
+                return render(request, 'login.html')
 
         else:
-            print('begin 5')
-            print(username)
-
             return render(request, 'login.html')
 
     else:
-        print('begin 6')
-
         return render(request,'login.html')
 
 # Dashboard view using the existing template

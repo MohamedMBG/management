@@ -69,14 +69,15 @@
                                     {% endfor %}
                                 {% endif %}
                             </div>
-                            <button id="connect" name="btn_submit" class="btn au-btn--block btn-outline-success"
-                                    type="submit">Connexion
+                            <button id="connect" name="btn_submit" class="btn au-btn--block btn-outline-success" type="submit">
+                                Connexion
                             </button>
-                            <!-- <div class="login-checkbox float-right">
+                            <div class="login-checkbox float-right">
                                     <label>
-                                        <a href="#">Mot de passe oublié?</a>
+                                        <a href="{% url 'client_panel:signup' %}">Pas de compte?</a>
                                     </label>
-                                </div>-->
+                                </div>
+
                         </form>
                     </div>
                 </div>

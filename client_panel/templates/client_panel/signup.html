@@ -5,7 +5,7 @@
 
 {% block content %}
 <div class="row justify-content-center">
-    <div class="auth-form-container">
+    <div class="auth-form-container col-md-6">
         <div class="card shadow-sm">
             <div class="card-header bg-success text-white">
                 <h4 class="mb-0 text-center">Create Client Account</h4>
@@ -13,7 +13,29 @@
             <div class="card-body p-4">
                 <form method="post" novalidate>
                     {% csrf_token %}
+
                     {{ form|crispy }}
+
+                    <!-- Extra fields not in UserCreationForm -->
+                    <div class="form-group mt-3">
+                        <input type="text" name="first_name" class="form-control" placeholder="First Name" required>
+                    </div>
+                    <div class="form-group mt-3">
+                        <input type="text" name="last_name" class="form-control" placeholder="Last Name" required>
+                    </div>
+                    <div class="form-group mt-3">
+                        <input type="email" name="email" class="form-control" placeholder="Email" required>
+                    </div>
+                    <div class="form-group mt-3">
+                        <input type="text" name="telephone" class="form-control" placeholder="Telephone" required>
+                    </div>
+                    <div class="form-group mt-3">
+                        <input type="text" name="adresse" class="form-control" placeholder="Adresse" required>
+                    </div>
+
+                    <!-- Hidden role field -->
+                    <input type="hidden" name="role" value="client">
+
                     <div class="d-grid gap-2 mt-4">
                         <button type="submit" class="btn btn-success btn-lg">Create Account</button>
                     </div>
@@ -21,7 +43,8 @@
             </div>
             <div class="card-footer text-center py-3">
                 <small class="text-muted">
-                    Already have an account? <a href="{% url 'client_signin' %}" class="text-success">Sign In</a>
+                    Already have an account?
+                    <a href="" class="text-success">Sign In</a><!-- % url 'client_signin' % -->
                 </small>
             </div>
         </div>
