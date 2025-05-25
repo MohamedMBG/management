@@ -11,20 +11,26 @@ def login_View(request):
         if not username or not password:
             messages.error(request, 'Please provide both username and password.')
             return render(request, 'login.html')
-        print('begin 2')
+        print(username)
+        print(password)
 
         # Attempt to authenticate using username
         user = authenticate(username=username, password=password)
         print('begin 3')
+        print(username)
+        print(password)
 
         if user is not None:
             login(request, user)
             print('begin 4')
+            print(username)
+            print(password)
 
             return redirect('admin_panel:dashboard')
 
         else:
             print('begin 5')
+            print(username)
 
             return render(request, 'login.html')
 
