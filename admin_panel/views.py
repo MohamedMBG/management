@@ -11,17 +11,26 @@ def login_View(request):
             messages.error(request, 'Please provide both username and password.')
             return render(request, 'login.html')
 
-        # Attempt to authenticate using email as the username field
+        # Attempt to authenticate using username
         user = authenticate(request, username=username, password=password)
 
         if user is not None:
             login(request, user)
-            return redirect('admin_panel:dashboard')
+            # Check if the user is an admin (staff or superuser)
+            if user.is_staff or user.is_superuser:
+                # Redirect to the admin dashboard
+                return redirect('admin_panel:dashboard')
+            else:
+                # Non-admin user logged in successfully but shouldn't access admin panel
+                messages.error(request, 'You do not have permission to access this panel.')
+                return render(request, 'login.html')
         else:
+            # Authentication failed (invalid username/password or user does not exist)
+            messages.error(request, 'Invalid username or password.')
             return render(request, 'login.html')
     else:
+        # GET request: display the login form
         return render(request, 'login.html')
-
 
 # Dashboard view using the existing template
 def dashboard_view(request):

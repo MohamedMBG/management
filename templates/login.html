@@ -46,7 +46,7 @@
                         </a>
                     </div>
                     <div class="login-form">
-                        <form action="/" method="POST" id="checkLogin">
+                        <form action="{% url 'admin_panel:login' %}" method="POST" id="checkLogin">
                             {% csrf_token %}
                             <div class="form-group">
 
