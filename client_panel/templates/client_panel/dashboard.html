@@ -1,113 +1,183 @@
-{% extends "base.html" %}
+{% extends 'client_panel/base.html' %}
 
-{% block title %}Client Dashboard - {{ block.super }}{% endblock %}
+{% block title %}Client Dashboard{% endblock %}
+
+{% block extra_css %}
+<style>
+    .stat-card {
+        border-radius: 10px;
+        transition: all 0.3s ease;
+        border-left: 4px solid #198754;
+        height: 100%;
+    }
+    .stat-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+    .stat-value {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: #198754;
+    }
+    .stat-icon {
+        font-size: 1.5rem;
+        color: #198754;
+    }
+    .purchase-item {
+        transition: all 0.2s ease;
+    }
+    .purchase-item:hover {
+        background-color: rgba(25, 135, 84, 0.05);
+    }
+    .account-info-card {
+        border-left: 4px solid #6c757d;
+    }
+</style>
+{% endblock %}
 
 {% block content %}
-<div class="row">
-    <!-- Sidebar/Profile Section -->
-    <div class="col-lg-4 mb-4">
-        <div class="card shadow-sm client-card">
-            <div class="card-header bg-secondary text-white">
-                <h5 class="mb-0"><i class="fas fa-user-circle me-2"></i>Client Profile</h5>
-            </div>
-            <div class="card-body text-center">
-                <div class="mb-3">
-                    <i class="fas fa-user-circle fa-5x text-secondary"></i>
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Dashboard Overview</h2>
+        <small class="text-muted">Welcome back, {{ user.first_name|default:user.username }}</small>
+    </div>
+
+    <!-- Stats Row -->
+    <div class="row mb-4 g-3">
+        <div class="col-md-4">
+            <div class="card stat-card h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-muted mb-2">TOTAL PURCHASES</h6>
+                            <h3 class="stat-value mb-0">{{ total_purchases }}</h3>
+                        </div>
+                        <i class="bi bi-cart-check stat-icon"></i>
+                    </div>
                 </div>
-                <h5 class="card-title">{{ request.user.get_full_name|default:request.user.email }}</h5>
-                <p class="card-text text-muted">{{ request.user.email }}</p>
             </div>
-            <ul class="list-group list-group-flush">
-                <li class="list-group-item d-flex justify-content-between">
-                    <strong><i class="fas fa-phone me-2 text-success"></i>Phone:</strong> 
-                    <span>{{ request.user.telephone|default:"N/A" }}</span>
-                </li>
-                <li class="list-group-item d-flex justify-content-between">
-                    <strong><i class="fas fa-map-marker-alt me-2 text-success"></i>Address:</strong> 
-                    <span>{{ request.user.adresse|default:"N/A" }}</span>
-                </li>
-            </ul>
-            <div class="card-footer">
-                <a href="#" class="btn btn-outline-success w-100"><i class="fas fa-edit me-2"></i>Edit Profile</a>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card stat-card h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-muted mb-2">TOTAL SPENT</h6>
+                            <h3 class="stat-value mb-0">{{ total_spent|floatformat:2 }} DH</h3>
+                        </div>
+                        <i class="bi bi-currency-euro stat-icon"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card stat-card h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-muted mb-2">LAST PURCHASE</h6>
+                            <h3 class="stat-value mb-0">
+                                {% if recent_orders %}
+                                    {{ recent_orders.0.created_at|date:"M d" }}
+                                {% else %}
+                                    Never
+                                {% endif %}
+                            </h3>
+                        </div>
+                        <i class="bi bi-calendar-check stat-icon"></i>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- Main Content Section -->
-    <div class="col-lg-8">
-        <!-- Stats Summary -->
-        <div class="row mb-4">
-            <div class="col-md-6 mb-3">
-                <div class="card shadow-sm stat-card">
-                    <div class="card-body d-flex align-items-center">
-                        <div class="stat-icon me-3">
-                            <i class="fas fa-shopping-cart"></i>
-                        </div>
-                        <div>
-                            <h6 class="text-muted mb-1">Total Purchases</h6>
-                            <h3 class="mb-0">{{ purchases.count|default:"0" }}</h3>
-                        </div>
+    <!-- Recent Purchases and Account Info -->
+    <div class="row g-3">
+        <!-- Recent Purchases -->
+        <div class="col-lg-8">
+            <div class="card h-100">
+                <div class="card-header bg-white">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">Recent Purchases</h5>
+                        <a href="{% url 'client_achats' %}" class="btn btn-sm btn-outline-success">
+                            View All <i class="bi bi-arrow-right ms-1"></i>
+                        </a>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-6 mb-3">
-                <div class="card shadow-sm stat-card">
-                    <div class="card-body d-flex align-items-center">
-                        <div class="stat-icon me-3">
-                            <i class="fas fa-calendar-alt"></i>
+                <div class="card-body">
+                    {% if recent_orders %}
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Product</th>
+                                        <th>Quantity</th>
+                                        <th>Total</th>
+                                        <th>Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for achat in recent_orders %}
+                                    <tr class="purchase-item">
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                {% if achat.produit.image %}
+                                                <img src="{{ achat.produit.image.url }}"
+                                                     alt="{{ achat.produit.designation }}"
+                                                     class="rounded me-2"
+                                                     width="40"
+                                                     height="40">
+                                                {% endif %}
+                                                {{ achat.produit.designation }}
+                                            </div>
+                                        </td>
+                                        <td>{{ achat.quantite }}</td>
+                                        <td>{{ achat.total_price|floatformat:2 }} DH</td>
+                                        <td>{{ achat.created_at|date:"M d, Y" }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
                         </div>
-                        <div>
-                            <h6 class="text-muted mb-1">Last Purchase</h6>
-                            <h3 class="mb-0">{{ purchases.first.date_Achat|date:"M d, Y"|default:"N/A" }}</h3>
+                    {% else %}
+                        <div class="text-center py-4">
+                            <i class="bi bi-cart-x" style="font-size: 2rem; color: #adb5bd;"></i>
+                            <p class="text-muted mt-2">No purchases yet</p>
+                            <a href="{% url 'client_products' %}" class="btn btn-success btn-sm">
+                                Browse Products
+                            </a>
                         </div>
-                    </div>
+                    {% endif %}
                 </div>
             </div>
         </div>
 
-        <!-- Recent Purchases -->
-        <div class="card shadow-sm">
-            <div class="card-header bg-info text-white d-flex justify-content-between align-items-center">
-                <h5 class="mb-0"><i class="fas fa-history me-2"></i>Recent Purchases</h5>
-                <a href="#" class="btn btn-sm btn-light"><i class="fas fa-download me-1"></i>Export</a>
-            </div>
-            <div class="card-body">
-                {% if purchases %}
-                <div class="table-responsive">
-                    <table class="table table-hover table-striped">
-                        <thead class="table-light">
-                            <tr>
-                                <th scope="col">Product</th>
-                                <th scope="col">Quantity</th>
-                                <th scope="col">Date</th>
-                                <th scope="col">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for purchase in purchases %}
-                            <tr>
-                                <td>{{ purchase.produit.designation }}</td>
-                                <td>{{ purchase.quantite }}</td>
-                                <td>{{ purchase.date_Achat|date:"Y-m-d" }}</td>
-                                <td>
-                                    <a href="#" class="btn btn-sm btn-outline-success"><i class="fas fa-eye"></i></a>
-                                </td>
-                            </tr>
-                            {% empty %}
-                            <tr>
-                                <td colspan="4" class="text-center text-muted">No purchases found.</td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
+        <!-- Account Info -->
+        <div class="col-lg-4">
+            <div class="card h-100 account-info-card">
+                <div class="card-header bg-white">
+                    <h5 class="mb-0">Account Information</h5>
                 </div>
-                {% else %}
-                <div class="text-center py-5">
-                    <i class="fas fa-shopping-cart fa-3x text-muted mb-3"></i>
-                    <p class="text-muted">You haven't made any purchases yet.</p>
-                    <a href="#" class="btn btn-success">Browse Products</a>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label class="form-label text-muted small mb-1">Full Name</label>
+                        <p class="mb-0">{{ user.get_full_name|default:"Not provided" }}</p>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label text-muted small mb-1">Email</label>
+                        <p class="mb-0">{{ user.email }}</p>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label text-muted small mb-1">Phone</label>
+                        <p class="mb-0">{{ client.telephone|default:"Not provided" }}</p>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label text-muted small mb-1">Address</label>
+                        <p class="mb-0">{{ client.adresse|default:"Not provided" }}</p>
+                    </div>
                 </div>
-                {% endif %}
             </div>
         </div>
     </div>

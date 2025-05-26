@@ -29,15 +29,20 @@ class Produit(models.Model):
         "Alert Quantité",
         help_text="Seuil pour la notification de stock faible."
     )
-    fournisseur = models.ForeignKey(Fournisseur, on_delete=models.CASCADE)
+    fournisseur = models.ForeignKey('Fournisseur', on_delete=models.CASCADE)
+    image = models.ImageField(
+        "Product Image",
+        upload_to='products/',
+        blank=True,
+        null=True,
+        default='products/default.png'
+    )
 
     def __str__(self):
         return f"{self.designation} ({self.quantite}) - Fournisseur: {self.fournisseur.nom}"
 
     def is_below_alert_level(self):
-        """Checks if the current quantity is at or below the alert threshold."""
         return self.quantite <= self.alert_quantite
-
 
 class Achat(models.Model):
     quantite = models.IntegerField("Quantité")

@@ -1,0 +1,17 @@
+[33ma64efb2[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m HEAD@{0}: reset: moving to a64efb2
+[33m3733e34[m[33m ([m[1;31morigin/main[m[33m)[m HEAD@{1}: pull: Fast-forward
+[33ma64efb2[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m HEAD@{2}: pull: Fast-forward
+[33m425d3a0[m HEAD@{3}: commit: mdoifying the admin_panel/views.py to keep a low complexity level
+[33mca58bb1[m HEAD@{4}: commit: mdoifying the admin_panel/views.py to keep a low complexity level
+[33m6f24224[m HEAD@{5}: pull: Fast-forward
+[33m56d5414[m HEAD@{6}: pull: Fast-forward
+[33m30fdf3e[m HEAD@{7}: commit: solving the adminDashboard.html interactivity with the buttons "showing produits"
+[33m59be488[m HEAD@{8}: commit: login solved
+[33mfb6172d[m HEAD@{9}: commit: login solved
+[33m3a093d1[m HEAD@{10}: commit: the admin login is not working
+[33mfd46e61[m HEAD@{11}: pull origin main: Fast-forward
+[33m9d07461[m HEAD@{12}: reset: moving to HEAD
+[33m9d07461[m HEAD@{13}: commit: admin login modification
+[33mcc867ee[m HEAD@{14}: pull: Fast-forward
+[33m4dab7cc[m HEAD@{15}: Branch: renamed refs/heads/master to refs/heads/main
+[33m4dab7cc[m HEAD@{17}: commit (initial): Initial commit

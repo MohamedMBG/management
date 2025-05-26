@@ -1,0 +1,35 @@
+<div class="sidebar">
+    <h4 class="text-center mb-4">Welcome</h4>
+    <a href="{% url 'some_dashboard' %}">🏠 Dashboard</a>
+    <a href="{% url 'client_achats' %}">🧾 My Purchases</a>
+    <a href="{% url 'client_products' %}">🛒 Products</a>
+    <a href="{% url 'client_logout' %}">🚪 Sign Out</a>
+</div>
+
+<style>
+    .sidebar {
+        height: 100vh;
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 220px;
+        background-color: #198754;
+        color: white;
+        padding-top: 40px;
+    }
+    .sidebar a {
+        display: block;
+        color: white;
+        padding: 12px 20px;
+        text-decoration: none;
+        transition: background-color 0.3s;
+    }
+    .sidebar a:hover {
+        background-color: #157347;
+        text-decoration: none;
+    }
+    .sidebar a.active {
+        background-color: #146c43;
+        font-weight: bold;
+    }
+</style>
