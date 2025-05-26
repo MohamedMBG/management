@@ -45,11 +45,6 @@ def dashboard_view(request):
 
 # Updated produits_view to fetch and display products
 def produits_view(request):
-    # Basic access control: only authenticated staff/admins
-    if not request.user.is_authenticated or not (request.user.is_staff or request.user.is_superuser):
-        messages.error(request, 'Access denied. Please log in as an administrator.')
-        return redirect('admin_panel:login')
-
     # Fetch all products from the database
     produits_list = Produit.objects.all()
     
