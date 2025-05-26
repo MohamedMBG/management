@@ -7,4 +7,5 @@ urlpatterns = [
     #path('signin/', views.signin_View, name='signin'), # Ajoutez les chemins nécessaires
     path('signin/', views.signin_View, name='client_signin'),
     path('dashboard/', views.dashboard_View, name='some_dashboard'),
+    path('logout/', views.signout_View, name='client_logout'),
 ]

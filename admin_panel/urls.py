@@ -13,6 +13,7 @@ urlpatterns = [
     
     # Dashboard route
     path('', views.dashboard_view, name='admin_dashboard'),
+    path('produits/', views.produits_view, name='produits')
 
     # Optional: Add a default redirect within the admin_panel if needed
     # path('', RedirectView.as_view(url='login/', permanent=False)),

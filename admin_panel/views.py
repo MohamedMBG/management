@@ -1,3 +1,4 @@
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
@@ -16,17 +17,7 @@ def login_View(request):
 
         if user is not None:
             login(request, user)
-            userGroup = request.user.groups.first()
-            if userGroup :
-                if userGroup == 'administrateur':
-                    return redirect('admin_panel:dashboard')
-                if userGroup == 'superviseur':
-                    return redirect()
-                if userGroup == 'client':
-                    return redirect()
-            else:
-                return render(request, 'login.html')
-
+            return redirect('admin_panel:admin_dashboard')
         else:
             return render(request, 'login.html')
 
@@ -45,3 +36,9 @@ def dashboard_view(request):
         'username': request.user.username
     }
     return render(request, 'admin_panel/adminDashboard.html', context)
+
+# def produits_view(request):
+#     return render(request, 'produits.html')
+
+def produits_view(request):
+    return render(request, 'admin_panel/produits.html')

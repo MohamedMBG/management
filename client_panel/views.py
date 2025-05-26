@@ -1,4 +1,4 @@
-from django.contrib.auth import login
+from django.contrib.auth import login, logout
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User, Group
@@ -70,6 +70,11 @@ def signin_View(request):
         login(request, form.get_user())
         return redirect('some_dashboard') # update as needed
     return render(request, 'client_panel/signin.html', {'form': form})
+
+def signout_View(request):
+    logout(request)
+    messages.success(request, "Vous avez été déconnecté(e) avec succès.")
+    return redirect('client_signin')
 
 def dashboard_View(request):
     return render(request, 'client_panel/dashboard.html')
