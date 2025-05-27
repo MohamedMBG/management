@@ -20,7 +20,7 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
-from admin_panel.views import login_View
+from admin_panel.views import login_view
 
 def home_redirect(request):
     return redirect('admin_panel:login')

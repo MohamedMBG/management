@@ -1,21 +1,31 @@
 # admin_panel/urls.py
 from django.urls import path
-from django.views.generic import RedirectView
-
 from . import views
 
-# Define the app_name for namespacing
 app_name = 'admin_panel'
 
 urlpatterns = [
-    # Authentication routes
-    path('login/', views.login_View, name='login'),
-    
-    # Dashboard route
-    path('', views.dashboard_view, name='admin_dashboard'),
-    path('produits/', views.produits_view, name='produits')
+    # Authentication
+    path('login/', views.login_view, name='login'),
+    path('logout/', views.logout_view, name='logout'),
 
-    # Optional: Add a default redirect within the admin_panel if needed
-    # path('', RedirectView.as_view(url='login/', permanent=False)),
+    # Dashboard
+    path('', views.dashboard, name='admin_dashboard'),
+
+    # Produits
+    path('produits/', views.produit_list, name='produit_list'),
+    path('produits/ajouter/', views.produit_add, name='add_produit'),
+
+    # Fournisseurs
+    path('fournisseurs/', views.fournisseur_list, name='fournisseur_list'),
+    path('fournisseurs/ajouter/', views.fournisseur_add, name='add_fournisseur'),
+
+    # Superviseurs (newly added)
+    path('superviseurs/', views.superviseur_list, name='superviseur_list'),
+    path('superviseurs/ajouter/', views.superviseur_add, name='add_superviseur'),
+    path('superviseurs/modifier/<int:pk>/', views.superviseur_edit, name='edit_superviseur'),
+    path('superviseurs/supprimer/<int:pk>/', views.superviseur_delete, name='delete_superviseur'),
+
+    # Achats
+    path('achats/', views.achats, name='achats'),
 ]
-

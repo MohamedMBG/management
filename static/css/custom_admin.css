@@ -285,3 +285,37 @@ a[aria-expanded="true"] {
     font-size: 2rem;
     color: var(--primary-green);
 }
+/* Sidebar icons spacing */
+#sidebar ul li a i {
+    width: 20px;
+    text-align: center;
+}
+
+/* Submenu items */
+#sidebar ul ul a {
+    padding-left: 45px !important;
+    font-size: 0.9em !important;
+    background: rgba(0, 0, 0, 0.1);
+}
+
+/* Active dropdown parent */
+#sidebar ul li.active > a[data-bs-toggle="collapse"] {
+    background: var(--sidebar-link-active-bg);
+    color: var(--sidebar-link-active-color);
+}
+
+/* Collapse arrow rotation */
+#sidebar a[aria-expanded="true"]::after {
+    transform: rotate(90deg);
+}
+
+/* Topbar adjustments */
+.topbar {
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+/* Content area padding */
+.main-content-area {
+    padding: 20px;
+    background-color: var(--main-content-bg);
+}
