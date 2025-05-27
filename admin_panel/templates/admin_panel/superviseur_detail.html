@@ -1,0 +1,9 @@
+{% extends 'admin_panel/master_page.html' %}
+
+{% block content %}
+<h1>Détails du Superviseur</h1>
+<p>Nom: {{ superviseur.nom }}</p>
+<p>Email: {{ superviseur.email }}</p>
+<!-- Add other fields as needed -->
+<a href="{% url 'admin_panel:superviseur_list' %}">Retour à la liste</a>
+{% endblock %}

@@ -30,7 +30,7 @@ urlpatterns = [
     path('superviseurs/ajouter/', views.superviseur_add, name='add_superviseur'),
     path('superviseurs/modifier/<int:pk>/', views.superviseur_edit, name='edit_superviseur'),
     path('superviseurs/supprimer/<int:pk>/', views.superviseur_delete, name='delete_superviseur'),
-
+    path('superviseurs/<int:pk>/', views.superviseur_detail, name='superviseur_detail'),
     # Achats
     path('achats/', views.achats, name='achats'),
     path('achats/ajouter/', views.achat_create, name='achat_create'),  # Add this line

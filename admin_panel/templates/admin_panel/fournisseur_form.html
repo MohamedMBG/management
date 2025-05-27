@@ -1,52 +1,51 @@
 {% extends 'admin_panel/master_page.html' %}
-{% load static %}
+{% load widget_tweaks %}
 
 {% block content %}
-<div class="container-fluid">
-    <div class="card">
-        <div class="card-header bg-success text-white">
-            <h3 class="card-title">
-                {% if form.instance.pk %}Modifier{% else %}Ajouter{% endif %} Fournisseur
-            </h3>
+<div class="container">
+    <h2>Ajouter un Superviseur</h2>
+    <form method="post">
+        {% csrf_token %}
+
+        <h4>Informations de Connexion</h4>
+        <div class="mb-3">
+            <label class="form-label">Nom d'utilisateur</label>
+            {% render_field form.username class="form-control" %}
         </div>
-        <div class="card-body">
-            <form method="post">
-                {% csrf_token %}
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="mb-3">
-                            <label class="form-label">Nom</label>
-                            {{ form.nom }}
-                            {% if form.nom.errors %}
-                                <div class="text-danger">{{ form.nom.errors }}</div>
-                            {% endif %}
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Contact</label>
-                            {{ form.contact }}
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="mb-3">
-                            <label class="form-label">Email</label>
-                            {{ form.email }}
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Téléphone</label>
-                            {{ form.telephone }}
-                        </div>
-                    </div>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Adresse</label>
-                    {{ form.adresse }}
-                </div>
-                <button type="submit" class="btn btn-primary">
-                    {% if form.instance.pk %}Mettre à jour{% else %}Enregistrer{% endif %}
-                </button>
-                <a href="{% url 'admin_panel:fournisseur_list' %}" class="btn btn-secondary">Annuler</a>
-            </form>
+
+        <div class="mb-3">
+            <label class="form-label">Mot de passe</label>
+            {% render_field form.password class="form-control" %}
         </div>
-    </div>
+
+        <h4 class="mt-4">Informations Personnelles</h4>
+        <div class="mb-3">
+            <label class="form-label">Nom</label>
+            {% render_field form.last_name class="form-control" %}
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Prénom</label>
+            {% render_field form.first_name class="form-control" %}
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Email</label>
+            {% render_field form.email class="form-control" %}
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Téléphone</label>
+            {% render_field form.telephone class="form-control" %}
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Adresse</label>
+            {% render_field form.adresse class="form-control" %}
+        </div>
+
+        <button type="submit" class="btn btn-primary">Enregistrer</button>
+        <a href="{% url 'admin_panel:superviseur_list' %}" class="btn btn-secondary">Annuler</a>
+    </form>
 </div>
 {% endblock %}

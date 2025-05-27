@@ -1,0 +1,92 @@
+{% extends 'supervisor_panel/supervisor_base.html' %}
+{% load static %}
+
+{% block title %}Supervisor Dashboard{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">Supervisor Dashboard</h1>
+    {# Removed logout/report buttons from here as they are in the sidebar now #}
+</div>
+
+<div class="row">
+    <!-- Stock Levels Chart -->
+    <div class="col-md-6 mb-4">
+        <div class="card">
+            <div class="card-header">
+                Product Stock Levels
+            </div>
+            <div class="card-body">
+                <canvas id="stockChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sales Trend Chart -->
+    <div class="col-md-6 mb-4">
+        <div class="card">
+            <div class="card-header">
+                Monthly Sales Quantity
+            </div>
+            <div class="card-body">
+                <canvas id="salesChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+{# Ensure Chart.js is loaded if not already in base, or remove if base loads it #}
+{# Assuming base doesn't load Chart.js specifically #}
+<script src="{% static 'vendor/chartjs/Chart.bundle.min.js' %}"></script>
+<script>
+    // Stock Chart
+    var ctxStock = document.getElementById('stockChart').getContext('2d');
+    var stockChart = new Chart(ctxStock, {
+        type: 'bar',
+        data: {
+            labels: {{ stock_labels|safe }},
+            datasets: [{
+                label: 'Current Stock Quantity',
+                data: {{ stock_data|safe }},
+                backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+    // Sales Chart
+    var ctxSales = document.getElementById('salesChart').getContext('2d');
+    var salesChart = new Chart(ctxSales, {
+        type: 'line',
+        data: {
+            labels: {{ sales_labels|safe }},
+            datasets: [{
+                label: 'Total Quantity Sold per Month',
+                data: {{ sales_data|safe }},
+                fill: false,
+                borderColor: 'rgb(75, 192, 192)',
+                tension: 0.1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
+{% endblock %}
+

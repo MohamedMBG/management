@@ -68,7 +68,6 @@ Elle utilise AuthenticationForm (formulaire intégré Django)
 pour valider les identifiants et connecter l'utilisateur.
 -----------------------------------------------------------------------------------------------------------------------------------------
 """
-
 def signin_View(request):
     form = AuthenticationForm(request, data=request.POST or None)  # Formulaire intégré Django pour se connecter
     if request.method == 'POST' and form.is_valid():  # Vérifie que c'est un POST et que les infos sont valides

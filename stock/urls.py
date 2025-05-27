@@ -20,7 +20,6 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
-from admin_panel.views import login_view
 
 def home_redirect(request):
     return redirect('admin_panel:login')
@@ -33,7 +32,9 @@ urlpatterns = [
     path('client_panel/', include('client_panel.urls')),
     # path('supervisor_panel/', include('supervisor_panel.urls')),
     #paths de superviseur
-    #path('supervisor_panel/' , include(('supervisor_panel.urls' , 'supervisor_panel') , namespace='supervisor_panel')),
+    path('supervisor_panel/', include('supervisor_panel.urls')),
+    path('supervisor_panel/' , include(('supervisor_panel.urls' , 'supervisor_panel') , namespace='supervisor_panel')),
+
 ]
 
 if settings.DEBUG:
