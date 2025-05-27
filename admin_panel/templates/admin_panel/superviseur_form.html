@@ -1,0 +1,72 @@
+{% extends 'admin_panel/master_page.html' %}
+{% load widget_tweaks %}
+
+{% block title %}Ajouter/Modifier Superviseur{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">{% if form.instance.pk %}Modifier{% else %}Ajouter{% endif %} Superviseur</h3>
+                </div>
+                <div class="card-body">
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="{{ form.nom.id_for_label }}">Nom</label>
+                            {% render_field form.nom class="form-control" %}
+                            {% if form.nom.errors %}
+                                <div class="text-danger">
+                                    {{ form.nom.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="form-group">
+                            <label for="{{ form.prenom.id_for_label }}">Prénom</label>
+                            {{ form.prenom|add_class:"form-control" }}
+                            {% if form.prenom.errors %}
+                                <div class="text-danger">
+                                    {{ form.prenom.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="form-group">
+                            <label for="{{ form.email.id_for_label }}">Email</label>
+                            {{ form.email|add_class:"form-control" }}
+                            {% if form.email.errors %}
+                                <div class="text-danger">
+                                    {{ form.email.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="form-group">
+                            <label for="{{ form.telephone.id_for_label }}">Téléphone</label>
+                            {{ form.telephone|add_class:"form-control" }}
+                            {% if form.telephone.errors %}
+                                <div class="text-danger">
+                                    {{ form.telephone.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="form-group">
+                            <label for="{{ form.departement.id_for_label }}">Département</label>
+                            {{ form.departement|add_class:"form-control" }}
+                            {% if form.departement.errors %}
+                                <div class="text-danger">
+                                    {{ form.departement.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="form-group mt-3">
+                            <button type="submit" class="btn btn-primary">Enregistrer</button>
+                            <a href="{% url 'admin_panel:superviseur_list' %}" class="btn btn-secondary">Annuler</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
