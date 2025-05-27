@@ -4,11 +4,9 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
-from .forms import ProduitForm, FournisseurForm, SuperviseurForm
+from .forms import ProduitForm, FournisseurForm, SuperviseurForm, AchatForm
 from .models import Produit, Fournisseur,Achat
 from supervisor_panel.models import Superviseur  # Import from the other app
-
-
 
 # Helper function to check admin status
 def is_admin(user):
@@ -61,6 +59,28 @@ def produit_add(request):
         form = ProduitForm()
     return render(request, 'admin_panel/produit_form.html', {'form': form})
 
+@login_required
+def produit_edit(request, pk):
+    produit = get_object_or_404(Produit, pk=pk)
+    if request.method == 'POST':
+        form = ProduitForm(request.POST, instance=produit)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Produit modifié avec succès!')
+            return redirect('admin_panel:produit_list')
+    else:
+        form = ProduitForm(instance=produit)
+    return render(request, 'admin_panel/produit_form.html', {'form': form})
+
+
+@login_required
+def produit_delete(request, pk):
+    produit = get_object_or_404(Produit, pk=pk)
+    if request.method == 'POST':
+        produit.delete()
+        messages.success(request, 'Produit supprimé avec succès!')
+        return redirect('admin_panel:produit_list')
+    return render(request, 'admin_panel/produit_confirm_delete.html', {'produit': produit})
 
 # Fournisseurs
 @login_required
@@ -82,6 +102,27 @@ def fournisseur_add(request):
         form = FournisseurForm()
     return render(request, 'admin_panel/fournisseur_form.html', {'form': form})
 
+@login_required
+def fournisseur_edit(request, pk):
+    fournisseur = get_object_or_404(Fournisseur, pk=pk)
+    if request.method == 'POST':
+        form = FournisseurForm(request.POST, instance=fournisseur)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Fournisseur modifié avec succès!')
+            return redirect('admin_panel:fournisseur_list')
+    else:
+        form = FournisseurForm(instance=fournisseur)
+    return render(request, 'admin_panel/fournisseur_form.html', {'form': form})
+
+@login_required
+def fournisseur_delete(request, pk):
+    fournisseur = get_object_or_404(Fournisseur, pk=pk)
+    if request.method == 'POST':
+        fournisseur.delete()
+        messages.success(request, 'Fournisseur supprimé avec succès!')
+    return redirect('admin_panel:fournisseur_list')
+
 
 # Superviseurs
 @login_required
@@ -92,13 +133,62 @@ def superviseur_list(request):
 
 
 # Achats
+# views.py
 @login_required
 def achats(request):
-    return render(request, 'admin_panel/achats.html', {
-        'total_amount': Achat.objects.aggregate(Sum('montant'))['montant__sum'] or 0,
-        'purchase_count': Achat.objects.count()
+    achats = Achat.objects.select_related('produit', 'client').all()
+    for achat in achats:
+        achat.total = achat.quantite * achat.produit.prix_unitaire
+    return render(request, 'admin_panel/achats.html', {'achats': achats})
+
+@login_required
+def achat_create(request):
+    if request.method == 'POST':
+        form = AchatForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Achat créé avec succès!')
+            return redirect('admin_panel:achats')
+    else:
+        form = AchatForm()
+    return render(request, 'admin_panel/achat_form.html', {'form': form})
+
+@login_required
+def achat_detail(request, pk):
+    achat = get_object_or_404(Achat.objects.select_related('produit', 'client'), pk=pk)
+    context = {
+        'achat': achat,
+        'montant_total': achat.produit.prix * achat.quantite  # Calculate total amount
+    }
+    return render(request, 'admin_panel/achat_detail.html', context)
+
+
+@login_required
+def achat_update(request, pk):
+    achat = get_object_or_404(Achat, pk=pk)
+    if request.method == 'POST':
+        form = AchatForm(request.POST, instance=achat)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Achat modifié avec succès!')
+            return redirect('admin_panel:achat_detail', pk=achat.id)
+    else:
+        form = AchatForm(instance=achat)
+
+    return render(request, 'admin_panel/achat_form.html', {
+        'form': form,
+        'title': 'Modifier Achat'
     })
 
+
+@login_required
+@login_required
+def achat_delete(request, pk):
+    achat = get_object_or_404(Achat, pk=pk)
+    if request.method == 'POST':
+        achat.delete()
+        messages.success(request, 'Achat supprimé avec succès!')
+    return redirect('admin_panel:achats')
 
 @login_required
 def superviseur_add(request):
