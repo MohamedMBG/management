@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'client_panel',
     'crispy_forms',
     'crispy_bootstrap4',
+    'widget_tweaks',
 ]
 
 MIDDLEWARE = [

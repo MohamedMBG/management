@@ -1,25 +1,87 @@
-<!DOCTYPE html>
+{% extends 'admin_panel/master_page.html' %}
 {% load static %}
-<html>
-    <head>
-        <title>Ajouter Produits</title>
-        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
-        <link href='//fonts.googleapis.com/css?family=Lobster&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
-        <link rel="stylesheet" href="{% static 'css/blog.css' %}">
-    </head>
-    <body>
-        <div class="page-header">
-            <a href="{% url 'addProduit' %}" class="top-menu"><span class="glyphicon glyphicon-plus"></span></a>
-            <h1><a href="">Produit</a></h1>
+
+{% block title %}Gestion des Fournisseurs{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Liste des Fournisseurs</h2>
+        <a href="{% url 'admin_panel:add_fournisseur' %}" class="btn btn-success">
+            <i class="fas fa-plus"></i> Ajouter Fournisseur
+        </a>
+    </div>
+    
+    {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
-        <div class="content container">
-            <div class="row">
-                <div class="col-md-8">
-                    {% block content %}
-                    {% endblock %}
-                </div>
+        {% endfor %}
+    {% endif %}
+
+    <div class="card">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered" id="fournisseursTable">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>Nom</th>
+                            <th>Contact</th>
+                            <th>Email</th>
+                            <th>Téléphone</th>
+                            <th>Adresse</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for fournisseur in fournisseurs %}
+                        <tr>
+                            <td>{{ fournisseur.nom }}</td>
+                            <td>{{ fournisseur.contact|default:"-" }}</td>
+                            <td>{{ fournisseur.email|default:"-" }}</td>
+                            <td>{{ fournisseur.telephone|default:"-" }}</td>
+                            <td>{{ fournisseur.adresse|truncatechars:30|default:"-" }}</td>
+                            <td>
+                                <!-- Edit button (placeholder if you want to add later) -->
+                                <a href="{% url 'admin_panel:edit_fournisseur' fournisseur.id %}" class="btn btn-sm btn-primary" title="Modifier">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <!-- Delete button -->
+                                <form method="post" action="{% url 'admin_panel:delete_fournisseur' fournisseur.id %}" style="display:inline;">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-sm btn-danger" title="Supprimer" 
+                                            onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce fournisseur?');">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="6" class="text-center">Aucun fournisseur enregistré</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
             </div>
         </div>
-    </body>
-</html>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+$(document).ready(function() {
+    $('#fournisseursTable').DataTable({
+        "language": {
+            "url": "//cdn.datatables.net/plug-ins/1.11.3/i18n/fr_fr.json"
+        },
+        "columnDefs": [
+            { "orderable": false, "targets": [5] } // Disable sorting on action column
+        ]
+    });
+});
+</script>
+{% endblock %}
