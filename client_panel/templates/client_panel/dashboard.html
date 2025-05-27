@@ -1,6 +1,6 @@
 {% extends 'client_panel/base.html' %}
 
-{% block title %}Client Dashboard{% endblock %}
+{% block title %}Tableau de bord client{% endblock %}
 
 {% block extra_css %}
 <style>
@@ -38,18 +38,18 @@
 {% block content %}
 <div class="container-fluid">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2>Dashboard Overview</h2>
-        <small class="text-muted">Welcome back, {{ user.first_name|default:user.username }}</small>
+        <h2>Aperçu du tableau de bord</h2>
+        <small class="text-muted">Bienvenue, {{ user.first_name|default:user.username }}</small>
     </div>
 
-    <!-- Stats Row -->
+    <!-- Ligne des statistiques -->
     <div class="row mb-4 g-3">
         <div class="col-md-4">
             <div class="card stat-card h-100">
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
-                            <h6 class="text-muted mb-2">TOTAL PURCHASES</h6>
+                            <h6 class="text-muted mb-2">ACHATS TOTAUX</h6>
                             <h3 class="stat-value mb-0">{{ total_purchases }}</h3>
                         </div>
                         <i class="bi bi-cart-check stat-icon"></i>
@@ -63,10 +63,9 @@
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
-                            <h6 class="text-muted mb-2">TOTAL SPENT</h6>
+                            <h6 class="text-muted mb-2">TOTAL DÉPENSÉ</h6>
                             <h3 class="stat-value mb-0">{{ total_spent|floatformat:2 }} DH</h3>
                         </div>
-                        <i class="bi bi-currency-euro stat-icon"></i>
                     </div>
                 </div>
             </div>
@@ -77,12 +76,12 @@
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
-                            <h6 class="text-muted mb-2">LAST PURCHASE</h6>
+                            <h6 class="text-muted mb-2">DERNIER ACHAT</h6>
                             <h3 class="stat-value mb-0">
                                 {% if recent_orders %}
-                                    {{ recent_orders.0.created_at|date:"M d" }}
+                                    {{ recent_orders.0.created_at|date:"d M" }}
                                 {% else %}
-                                    Never
+                                    Jamais
                                 {% endif %}
                             </h3>
                         </div>
@@ -93,16 +92,16 @@
         </div>
     </div>
 
-    <!-- Recent Purchases and Account Info -->
+    <!-- Achats récents et informations du compte -->
     <div class="row g-3">
-        <!-- Recent Purchases -->
+        <!-- Achats récents -->
         <div class="col-lg-8">
             <div class="card h-100">
                 <div class="card-header bg-white">
                     <div class="d-flex justify-content-between align-items-center">
-                        <h5 class="mb-0">Recent Purchases</h5>
+                        <h5 class="mb-0">Achats récents</h5>
                         <a href="{% url 'client_achats' %}" class="btn btn-sm btn-outline-success">
-                            View All <i class="bi bi-arrow-right ms-1"></i>
+                            Voir tout <i class="bi bi-arrow-right ms-1"></i>
                         </a>
                     </div>
                 </div>
@@ -112,8 +111,8 @@
                             <table class="table table-hover">
                                 <thead>
                                     <tr>
-                                        <th>Product</th>
-                                        <th>Quantity</th>
+                                        <th>Produit</th>
+                                        <th>Quantité</th>
                                         <th>Total</th>
                                         <th>Date</th>
                                     </tr>
@@ -135,7 +134,7 @@
                                         </td>
                                         <td>{{ achat.quantite }}</td>
                                         <td>{{ achat.total_price|floatformat:2 }} DH</td>
-                                        <td>{{ achat.created_at|date:"M d, Y" }}</td>
+                                        <td>{{ achat.created_at|date:"d M Y" }}</td>
                                     </tr>
                                     {% endfor %}
                                 </tbody>
@@ -144,9 +143,9 @@
                     {% else %}
                         <div class="text-center py-4">
                             <i class="bi bi-cart-x" style="font-size: 2rem; color: #adb5bd;"></i>
-                            <p class="text-muted mt-2">No purchases yet</p>
+                            <p class="text-muted mt-2">Aucun achat pour le moment</p>
                             <a href="{% url 'client_products' %}" class="btn btn-success btn-sm">
-                                Browse Products
+                                Voir les produits
                             </a>
                         </div>
                     {% endif %}
@@ -154,28 +153,28 @@
             </div>
         </div>
 
-        <!-- Account Info -->
+        <!-- Informations du compte -->
         <div class="col-lg-4">
             <div class="card h-100 account-info-card">
                 <div class="card-header bg-white">
-                    <h5 class="mb-0">Account Information</h5>
+                    <h5 class="mb-0">Informations du compte</h5>
                 </div>
                 <div class="card-body">
                     <div class="mb-3">
-                        <label class="form-label text-muted small mb-1">Full Name</label>
-                        <p class="mb-0">{{ user.get_full_name|default:"Not provided" }}</p>
+                        <label class="form-label text-muted small mb-1">Nom complet</label>
+                        <p class="mb-0">{{ user.get_full_name|default:"Non renseigné" }}</p>
                     </div>
                     <div class="mb-3">
                         <label class="form-label text-muted small mb-1">Email</label>
                         <p class="mb-0">{{ user.email }}</p>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label text-muted small mb-1">Phone</label>
-                        <p class="mb-0">{{ client.telephone|default:"Not provided" }}</p>
+                        <label class="form-label text-muted small mb-1">Téléphone</label>
+                        <p class="mb-0">{{ client.telephone|default:"Non renseigné" }}</p>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label text-muted small mb-1">Address</label>
-                        <p class="mb-0">{{ client.adresse|default:"Not provided" }}</p>
+                        <label class="form-label text-muted small mb-1">Adresse</label>
+                        <p class="mb-0">{{ client.adresse|default:"Non renseigné" }}</p>
                     </div>
                 </div>
             </div>
