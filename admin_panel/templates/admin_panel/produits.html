@@ -8,7 +8,7 @@
     <div class="container-fluid">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h2>Liste des Produits</h2>
-            <a href="{% url 'admin_panel:add_produit' %}" class="btn btn-success">
+            <a href="{% url 'admin_panel:produit_create' %}" class="btn btn-success">
                 <i class="fas fa-plus"></i> Ajouter Produit
             </a>
         </div>
@@ -46,10 +46,10 @@
                                     {% endif %}
                                 </td>
                                 <td>
-                                    <a href="{% url 'admin_panel:edit_produit' produit.id %}" class="btn btn-sm btn-primary" title="Modifier">
+                                    <a href="{% url 'admin_panel:produit_update' produit.id %}" class="btn btn-sm btn-primary" title="Modifier">
                                         <i class="fas fa-edit"></i>
                                     </a>
-                                    <form method="post" action="{% url 'admin_panel:delete_produit' produit.id %}" style="display:inline;">
+                                    <form method="post" action="{% url 'admin_panel:produit_delete' produit.id %}" style="display:inline;">
                                         {% csrf_token %}
                                         <button type="submit" class="btn btn-sm btn-danger" title="Supprimer" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce produit?');">
                                             <i class="fas fa-trash"></i>

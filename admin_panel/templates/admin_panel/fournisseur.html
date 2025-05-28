@@ -7,7 +7,7 @@
 <div class="container-fluid">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2>Liste des Fournisseurs</h2>
-        <a href="{% url 'admin_panel:add_fournisseur' %}" class="btn btn-success">
+        <a href="{% url 'admin_panel:fournisseur_create' %}" class="btn btn-success">
             <i class="fas fa-plus"></i> Ajouter Fournisseur
         </a>
     </div>
@@ -45,11 +45,11 @@
                             <td>{{ fournisseur.adresse|truncatechars:30|default:"-" }}</td>
                             <td>
                                 <!-- Edit button (placeholder if you want to add later) -->
-                                <a href="{% url 'admin_panel:edit_fournisseur' fournisseur.id %}" class="btn btn-sm btn-primary" title="Modifier">
+                                <a href="{% url 'admin_panel:fournisseur_update' fournisseur.id %}" class="btn btn-sm btn-primary" title="Modifier">
                                     <i class="fas fa-edit"></i>
                                 </a>
                                 <!-- Delete button -->
-                                <form method="post" action="{% url 'admin_panel:delete_fournisseur' fournisseur.id %}" style="display:inline;">
+                                <form method="post" action="{% url 'admin_panel:fournisseur_delete' fournisseur.id %}" style="display:inline;">
                                     {% csrf_token %}
                                     <button type="submit" class="btn btn-sm btn-danger" title="Supprimer" 
                                             onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce fournisseur?');">

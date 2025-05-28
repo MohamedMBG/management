@@ -24,8 +24,14 @@ class SuperviseurForm(forms.ModelForm):
 class AchatForm(forms.ModelForm):
     class Meta:
         model = Achat
-        fields = '__all__'
+        fields = ['produit', 'client', 'quantite']
         widgets = {
-            'date_achat': forms.DateInput(attrs={'type': 'date'}),
-            'date_livraison': forms.DateInput(attrs={'type': 'date'}),
+            'produit': forms.Select(attrs={'class': 'form-select'}),
+            'client': forms.Select(attrs={'class': 'form-select'}),
+            'quantite': forms.NumberInput(attrs={'class': 'form-control'}),
+        }
+        labels = {
+            'produit': 'Produit',
+            'client': 'Client',
+            'quantite': 'Quantité'
         }

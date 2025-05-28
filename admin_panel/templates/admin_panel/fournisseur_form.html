@@ -3,30 +3,15 @@
 
 {% block content %}
 <div class="container">
-    <h2>Ajouter un Superviseur</h2>
+    <h2>Ajouter un Fournisseur</h2>
     <form method="post">
         {% csrf_token %}
 
-        <h4>Informations de Connexion</h4>
-        <div class="mb-3">
-            <label class="form-label">Nom d'utilisateur</label>
-            {% render_field form.username class="form-control" %}
-        </div>
+        <h4>Informations du Fournisseur</h4>
 
-        <div class="mb-3">
-            <label class="form-label">Mot de passe</label>
-            {% render_field form.password class="form-control" %}
-        </div>
-
-        <h4 class="mt-4">Informations Personnelles</h4>
         <div class="mb-3">
             <label class="form-label">Nom</label>
-            {% render_field form.last_name class="form-control" %}
-        </div>
-
-        <div class="mb-3">
-            <label class="form-label">Prénom</label>
-            {% render_field form.first_name class="form-control" %}
+            {% render_field form.nom class="form-control" %}
         </div>
 
         <div class="mb-3">
@@ -41,11 +26,11 @@
 
         <div class="mb-3">
             <label class="form-label">Adresse</label>
-            {% render_field form.adresse class="form-control" %}
+            {% render_field form.adresse class="form-control" rows="3" %}
         </div>
 
         <button type="submit" class="btn btn-primary">Enregistrer</button>
-        <a href="{% url 'admin_panel:superviseur_list' %}" class="btn btn-secondary">Annuler</a>
+        <a href="{% url 'admin_panel:fournisseur_list' %}" class="btn btn-secondary">Annuler</a>
     </form>
 </div>
 {% endblock %}
