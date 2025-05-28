@@ -7,6 +7,7 @@ from django.contrib.auth.models import User, Group  # Modèles intégrés de Dja
 from django.contrib import messages  # Système intégré de Django pour afficher des messages à l'utilisateur
 
 from admin_panel.models import Achat, Produit
+from admin_panel.utility import send_stock_alert
 from client_panel.models import Client
 
 """""
@@ -75,7 +76,6 @@ def signin_View(request):
         return redirect('some_dashboard')  # Redirige vers un tableau de bord
     return render(request, 'client_panel/signin.html', {'form': form})  # Affiche le formulaire de connexion
 
-
 """
 -----------------------------------------------------------------------------------------------------------------------------------------
 Fonction: signout_View
@@ -87,8 +87,6 @@ def signout_View(request):
     logout(request)  # Fonction intégrée Django pour déconnecter l'utilisateur
     messages.success(request, "Vous avez été déconnecté(e) avec succès.")  # Affiche un message de succès
     return redirect('client_signin')  # Redirige vers la page de connexion
-
-
 """
 -----------------------------------------------------------------------------------------------------------------------------------------
 Fonction: client_dashboard
@@ -162,6 +160,10 @@ def make_purchase(request, product_id):
 
         produit.quantite -= quantity  # Réduit le stock du produit
         produit.save()  # Sauvegarde les modifications dans la base
+
+        if send_stock_alert(produit):
+            # Log to console (optional)
+            print(f"Alerte stock envoyée pour {produit.designation}")
 
         messages.success(request, f"Successfully purchased {quantity} x {produit.designation}")
         return redirect('client_achats')  # Redirige vers l'historique d'achats

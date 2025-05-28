@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from admin_panel.forms import ProduitForm, FournisseurForm, AchatForm, SuperviseurForm
 from admin_panel.models import Produit, Fournisseur, Achat
+from admin_panel.utility import send_stock_alert
 from supervisor_panel.forms import SuperviseurCreationForm
 from supervisor_panel.models import Superviseur
 
@@ -32,38 +33,24 @@ def logout_view(request):
 def dashboard(request):
     return render(request, 'admin_panel/adminDashboard.html')
 
-
 # CRUD Produits
 @login_required
 def produit_list(request):
     return render(request, 'admin_panel/produits.html', {'produits': Produit.objects.all()})
+
 @login_required
 def produit_manage(request, pk=None):
-    """ expliquation de cette fonction: c'est comme on affiche le formulaire de creation de produit, si le produit deja existant
-    on remplit ces informations automatiquement pour qu'on puisse just le modifier sinon on le creer"""
-
-    # Si on a un ID (pk), on cherche le produit dans la base de données
-    # Sinon, on prépare un nouveau produit (vide)
     produit = get_object_or_404(Produit, pk=pk) if pk else None
+    form = ProduitForm(request.POST or None, request.FILES or None, instance=produit)
 
-    # On crée le formulaire :
-    # - Si l'utilisateur a envoyé des données (POST), on les récupère
-    # - Sinon, on affiche le formulaire vide (ou rempli si modification)
-    form = ProduitForm(request.POST or None, instance=produit)
-
-    # Si l'utilisateur a soumis le formulaire et que tout est bien rempli :
     if request.method == 'POST' and form.is_valid():
-        # On enregistre les infos dans la base de données
-        form.save()
+        produit = form.save()
 
-        # On montre un message à l’utilisateur : "Produit ajouté" ou "Produit modifié"
+        if produit.is_below_alert_level() and produit.fournisseur:
+            send_stock_alert(produit)
         messages.success(request, f'Produit {"modifié" if pk else "ajouté"}!')
-
-        # On le redirige vers la page où il peut voir tous les produits
         return redirect('admin_panel:produit_list')
 
-    # Si ce n'est pas un envoi de formulaire ou s'il y a une erreur,
-    # on affiche simplement le formulaire à l'écran
     return render(request, 'admin_panel/produit_form.html', {'form': form})
 
 @login_required
@@ -119,8 +106,19 @@ def achat_manage(request, pk=None):
     achat = get_object_or_404(Achat, pk=pk) if pk else None
     form = AchatForm(request.POST or None, instance=achat)
 
+    # if request.method == 'POST' and form.is_valid():
+    #     form.save()
+    #     messages.success(request, f'Achat {"modifié" if pk else "créé"}!')
+    #     return redirect('admin_panel:achat_detail', pk=form.instance.pk if not pk else pk)
+
+
     if request.method == 'POST' and form.is_valid():
-        form.save()
+        achat = form.save()
+        produit = achat.produit
+        produit.quantite -= achat.quantite
+        produit.save()
+        if send_stock_alert(produit):  # Using the utility function
+            messages.info(request, f"Alerte envoyée à {produit.fournisseur.nom}")
         messages.success(request, f'Achat {"modifié" if pk else "créé"}!')
         return redirect('admin_panel:achat_detail', pk=form.instance.pk if not pk else pk)
 
@@ -149,6 +147,7 @@ def superviseur_detail(request, pk):
 def superviseur_manage(request, pk=None):
     superviseur = get_object_or_404(Superviseur, pk=pk) if pk else None
     form_class = SuperviseurForm if pk else SuperviseurCreationForm
+
     form = form_class(request.POST or None, instance=superviseur,
                       initial={'email': superviseur.email} if pk else None)
 
