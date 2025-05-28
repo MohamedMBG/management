@@ -52,3 +52,6 @@ class Achat(models.Model):
 
     def __str__(self):
         return f"Achat de {self.quantite} x {self.produit.designation} par {self.client}"
+
+    def total(self):
+        return self.quantite * self.produit.prix_unitaire

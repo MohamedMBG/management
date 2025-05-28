@@ -53,7 +53,16 @@ def logout_view(request):
 # Protection de la vue - accessible uniquement aux utilisateurs connectés
 @login_required
 def dashboard(request):
-    return render(request, 'admin_panel/adminDashboard.html')
+    context = {
+        'produits_count': Produit.objects.count(),
+        'fournisseurs_count': Fournisseur.objects.count(),
+        'achats_count': Achat.objects.count(),
+        'superviseurs_count': Superviseur.objects.count(),
+        'derniers_produits': Produit.objects.order_by('-id')[:4],
+        'derniers_achats': Achat.objects.select_related('produit').order_by('-created_at')[:4],
+        'user': request.user
+    }
+    return render(request, 'admin_panel/adminDashboard.html', context)
 
 # ===== GESTION DES PRODUITS (CRUD) =====
 @login_required

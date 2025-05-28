@@ -17,11 +17,9 @@
             <tr>
                 <th>ID</th>
                 <th>Produit</th>
-                <th>Client</th>
                 <th>Quantité</th>
                 <th>Prix Unitaire</th>
                 <th>Total</th>
-                <th>Date</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -30,11 +28,9 @@
             <tr>
                 <td>{{ achat.id }}</td>
                 <td>{{ achat.produit.designation }}</td>  <!-- Changé de nom à designation -->
-                <td>{{ achat.client.nom }}</td>
                 <td>{{ achat.quantite }}</td>
-                <td>{{ achat.produit.prix_unitaire }} €</td>
-                <td>{{ achat.quantite|floatformat:2 }} €</td>
-                <td>{{ achat.date_achat|date:"d/m/Y H:i" }}</td>  <!-- Utilise date_achat -->
+                <td>{{ achat.produit.prix_unitaire }} DHs</td>
+                <td>{{ achat.total|floatformat:2 }} DHs</td>
                 <td>
                     <a href="{% url 'admin_panel:achat_detail' achat.id %}" class="btn btn-sm btn-info">
                         <i class="fas fa-eye"></i>
@@ -62,7 +58,7 @@
     <div class="mt-3">
         <p class="text-end">
             <strong>Total achats :</strong> {{ achats.count }} |
-            <strong>Montant total :</strong> {{ montant_total|floatformat:2 }} €
+            <strong>Montant total :</strong> {{ montant_total|floatformat:2 }} DHs
         </p>
     </div>
 </div>
