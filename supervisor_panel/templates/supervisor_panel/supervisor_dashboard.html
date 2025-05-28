@@ -1,20 +1,20 @@
 {% extends 'supervisor_panel/supervisor_base.html' %}
 {% load static %}
 
-{% block title %}Supervisor Dashboard{% endblock %}
+{% block title %}Tableau de Bord Superviseur{% endblock %}
 
 {% block content %}
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-    <h1 class="h2">Supervisor Dashboard</h1>
-    {# Removed logout/report buttons from here as they are in the sidebar now #}
+    <h1 class="h2">Tableau de Bord Superviseur</h1>
+    {# Boutons de déconnexion/rapport retirés car maintenant dans la sidebar #}
 </div>
 
 <div class="row">
-    <!-- Stock Levels Chart -->
+    <!-- Graphique des niveaux de stock -->
     <div class="col-md-6 mb-4">
         <div class="card">
             <div class="card-header">
-                Product Stock Levels
+                Niveaux de Stock des Produits
             </div>
             <div class="card-body">
                 <canvas id="stockChart"></canvas>
@@ -22,11 +22,11 @@
         </div>
     </div>
 
-    <!-- Sales Trend Chart -->
+    <!-- Graphique des tendances de vente -->
     <div class="col-md-6 mb-4">
         <div class="card">
             <div class="card-header">
-                Monthly Sales Quantity
+                Quantité Mensuelle des Ventes
             </div>
             <div class="card-body">
                 <canvas id="salesChart"></canvas>
@@ -38,18 +38,17 @@
 {% endblock %}
 
 {% block extra_js %}
-{# Ensure Chart.js is loaded if not already in base, or remove if base loads it #}
-{# Assuming base doesn't load Chart.js specifically #}
+{# S'assurer que Chart.js est chargé si ce n'est pas déjà fait dans la base #}
 <script src="{% static 'vendor/chartjs/Chart.bundle.min.js' %}"></script>
 <script>
-    // Stock Chart
+    // Graphique de stock
     var ctxStock = document.getElementById('stockChart').getContext('2d');
     var stockChart = new Chart(ctxStock, {
         type: 'bar',
         data: {
             labels: {{ stock_labels|safe }},
             datasets: [{
-                label: 'Current Stock Quantity',
+                label: 'Quantité de Stock Actuelle',
                 data: {{ stock_data|safe }},
                 backgroundColor: 'rgba(54, 162, 235, 0.6)',
                 borderColor: 'rgba(54, 162, 235, 1)',
@@ -65,14 +64,14 @@
         }
     });
 
-    // Sales Chart
+    // Graphique des ventes
     var ctxSales = document.getElementById('salesChart').getContext('2d');
     var salesChart = new Chart(ctxSales, {
         type: 'line',
         data: {
             labels: {{ sales_labels|safe }},
             datasets: [{
-                label: 'Total Quantity Sold per Month',
+                label: 'Quantité Totale Vendue par Mois',
                 data: {{ sales_data|safe }},
                 fill: false,
                 borderColor: 'rgb(75, 192, 192)',
@@ -89,4 +88,3 @@
     });
 </script>
 {% endblock %}
-
