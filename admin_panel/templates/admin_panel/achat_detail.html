@@ -11,37 +11,23 @@
         <div class="card-body">
             <dl class="row">
                 <dt class="col-sm-3">Produit:</dt>
-                <dd class="col-sm-9">{{ achat.produit.nom }}</dd>
+                <dd class="col-sm-9">{{ achat.produit.designation }}</dd>
 
                 <dt class="col-sm-3">Client:</dt>
-                <dd class="col-sm-9">{{ achat.client.nom }}</dd>
+                <dd class="col-sm-9">{{ achat.client.user.get_full_name }}</dd>
 
                 <dt class="col-sm-3">Quantité:</dt>
                 <dd class="col-sm-9">{{ achat.quantite }}</dd>
 
                 <dt class="col-sm-3">Prix unitaire:</dt>
-                <dd class="col-sm-9">{{ achat.produit.prix }} DH</dd>
+                <dd class="col-sm-9">{{ achat.produit.prix_unitaire }} DH</dd>
 
                 <dt class="col-sm-3">Montant total:</dt>
                 <dd class="col-sm-9">{{ montant_total }} DH</dd>
 
                 <dt class="col-sm-3">Date d'achat:</dt>
-                <dd class="col-sm-9">{{ achat.date_achat|date:"d/m/Y" }}</dd>
+                <dd class="col-sm-9">{{ achat.created_at }}</dd>
 
-                {% if achat.date_livraison %}
-                <dt class="col-sm-3">Date de livraison:</dt>
-                <dd class="col-sm-9">{{ achat.date_livraison|date:"d/m/Y" }}</dd>
-                {% endif %}
-
-                <dt class="col-sm-3">Statut:</dt>
-                <dd class="col-sm-9">
-                    <span class="badge 
-                        {% if achat.statut == 'livre' %}bg-success
-                        {% elif achat.statut == 'annule' %}bg-danger
-                        {% else %}bg-warning{% endif %}">
-                        {{ achat.get_statut_display }}
-                    </span>
-                </dd>
             </dl>
             <div class="mt-4">
                 <a href="{% url 'admin_panel:achat_update' achat.id %}" class="btn btn-warning">

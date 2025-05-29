@@ -137,8 +137,18 @@
         </div>
         <div class="card-footer">
             <small>
-                New here?&nbsp;
                 <a href="{% url 'signup' %}" class="text-success">Create an account</a>
+            </small>
+        </div>
+        <div class="card-footer">
+            <small>
+                <a href="{% url 'admin_panel:login' %}" class="text-success">Admin</a>
+            </small>
+            <small>
+                <a> Ou </a>
+            </small>
+            <small>
+                <a href="{% url 'supervisor_panel:login' %}" class="text-success" style="color: white">Superviseur</a>
             </small>
         </div>
     </div>
